@@ -1,6 +1,6 @@
 # 📈 Real-Time AI Market Insights
 
-Its a high-performance, full-stack stock market application built with **Next.js 15**. It leverages **Inngest** for reliable background workflows, **OpenAI** for automated market analysis, and real-time data streaming to provide users with actionable financial insights.
+Its a high-performance, full-stack stock market application built with **Next.js 15**. It leverages **Inngest** for reliable background workflows, **OpenAI** for automated market analysis, and real-time data streaming to provide users with actionable financial insights for shareholders.
 
 ## 🚀 Features
 
