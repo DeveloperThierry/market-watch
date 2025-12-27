@@ -17,7 +17,7 @@ const NavItems = () => {
           <SearchCommand
           renderAs="text"
           label="Search"
-          initialStocks={[]}
+          initialStocks={[{symbol:'TST', name:'TEST', exchange:'NASDAQ',type:"TYPE", isInWatchlist:false }]}
           />
         </li>
         return (<li key={href} className={`hover:text-yellow-500 transition-colors ${isActive(href) ? 'text-gray-100' : '' }`}>{label}</li>)})}
