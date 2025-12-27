@@ -1,10 +1,13 @@
 'use client';
 
-import { useForm } from 'react-hook-form';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import { Button } from '@/components/ui/button';
 import InputField from '@/components/forms/InputField';
 import FooterLink from '@/components/forms/FooterLink';
 import {useRouter} from "next/navigation";
+import { signInEmail } from 'better-auth/api';
+import { toast } from 'sonner';
+import { signInWithEmail } from '@/lib/actions/auth-actions';
 
 const SignIn = () => {
     const router = useRouter()
@@ -20,7 +23,20 @@ const SignIn = () => {
         mode: 'onBlur',
     });
 
-    const onSubmit = async (data: SignInFormData) => {}
+
+    const onSubmit: SubmitHandler<SignInFormData> = async (
+        data: SignInFormData
+      ) => {
+        try {
+          const result = await signInWithEmail(data)
+          if(result.success) router.push('/')
+        } catch (e) {
+          console.error(e);
+          toast.error('Sign in failed', {
+            description:e instanceof Error ? e.message :'Failed to sign in'
+          })
+        }
+      };
 
     return (
         <>
