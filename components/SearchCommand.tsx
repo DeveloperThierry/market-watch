@@ -76,7 +76,7 @@ const SearchCommand = ({
                 <li key={stock.symbol} className="search-item">
                   <Link
                     href={`/stocks/${stock.symbol}`}
-                    onClick={handleSelectStock}
+                    onClick={() => handleSelectStock}
                     className="search-item-link"
                   >
                     <TrendingUp className="h-4 w-4 text-gray-500" />
