@@ -1,9 +1,16 @@
-'use client'
-import { useEffect, useState } from "react"
-import { CommandDialog, CommandEmpty, CommandInput, CommandList } from "@/components/ui/command"
-import {Button} from "@/components/ui/button";
-import {Loader2,  TrendingUp} from "lucide-react";
+"use client";
+import { useEffect, useState } from "react";
+import {
+  CommandDialog,
+  CommandEmpty,
+  CommandInput,
+  CommandList,
+} from "@/components/ui/command";
+import { Button } from "@/components/ui/button";
+import { Loader2, Star, TrendingUp } from "lucide-react";
 import Link from "next/link";
+import { searchStocks } from "@/lib/actions/finnhub.actions";
+import { useDebounce } from "@/hooks/useDebounce";
 
 const SearchCommand = ({
   renderAs = "button",
@@ -13,7 +20,8 @@ const SearchCommand = ({
   const [open, setOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(false);
-  const [stocks, setStocks] = useState<StockWithWatchlistStatus[]>(initialStocks);
+  const [stocks, setStocks] =
+    useState<StockWithWatchlistStatus[]>(initialStocks);
   const isSearchMode = !!searchTerm.trim();
   const displayStocks = isSearchMode ? stocks : stocks?.slice(0, 10);
 
@@ -28,9 +36,30 @@ const SearchCommand = ({
     return () => window.removeEventListener("keydown", onKeyDown);
   }, []);
 
+  const handleSearch = async () => {
+    if (!isSearchMode) return setStocks(initialStocks);
+    setLoading(true);
+    try{
+        const results = await searchStocks(searchTerm.trim())
+        setStocks(results)
+    }
+    catch(err){
+        setStocks([])
+    }
+    finally{setLoading(false)}
+  };
+
+  const debouncedSearch = useDebounce(handleSearch, 300)
+
+  useEffect(()=>{
+    debouncedSearch()
+  },[searchTerm])
+
   const handleSelectStock = (value: string) => {
     console.log("Stock selected");
     setOpen(false);
+    setSearchTerm('')
+    setStocks(initialStocks)
   };
   return (
     <>
@@ -69,8 +98,8 @@ const SearchCommand = ({
           ) : (
             <ul>
               <div className="search-count">
-                {isSearchMode ? "Search results" : "Popular stocks"}(
-                {' '}{displayStocks?.length || 0})
+                {isSearchMode ? "Search results" : "Popular stocks"}({" "}
+                {displayStocks?.length || 0})
               </div>
               {displayStocks?.map((stock, i) => (
                 <li key={stock.symbol} className="search-item">
@@ -84,10 +113,10 @@ const SearchCommand = ({
                       <div className="search-item-name">{stock.name}</div>
                     </div>
                     <div className="text-sm text-gray-500">
-                        {stock.symbol} | {stock.exchange} | {stock.type}
+                      {stock.symbol} | {stock.exchange} | {stock.type}
                     </div>
+                  <Star/>
                   </Link>
-                  
                 </li>
               ))}
             </ul>

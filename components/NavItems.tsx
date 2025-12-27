@@ -4,7 +4,7 @@ import { NAV_ITEMS } from '@/lib/constants'
 import { usePathname } from 'next/navigation'
 import SearchCommand from './SearchCommand'
 
-const NavItems = () => {
+const NavItems = ({initialStocks}:{initialStocks:StockWithWatchlistStatus[]}) => {
     const pathname = usePathname()
     const isActive = (path:string) => {
         if (path === '/') return pathname === '/'
@@ -17,7 +17,7 @@ const NavItems = () => {
           <SearchCommand
           renderAs="text"
           label="Search"
-          initialStocks={[{symbol:'TST', name:'TEST', exchange:'NASDAQ',type:"TYPE", isInWatchlist:false }]}
+          initialStocks={initialStocks}
           />
         </li>
         return (<li key={href} className={`hover:text-yellow-500 transition-colors ${isActive(href) ? 'text-gray-100' : '' }`}>{label}</li>)})}
