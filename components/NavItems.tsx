@@ -2,7 +2,7 @@
 
 import { NAV_ITEMS } from '@/lib/constants'
 import { usePathname } from 'next/navigation'
-import React from 'react'
+import SearchCommand from './SearchCommand'
 
 const NavItems = () => {
     const pathname = usePathname()
@@ -12,7 +12,15 @@ const NavItems = () => {
     }
   return (
     <ul className="flex flex-col sm:flex-row p-2 gap-3 sm:gap-10 font-medium">
-       {NAV_ITEMS.map(({href, label}) => <li key={href} className={`hover:text-yellow-500 transition-colors ${isActive(href) ? 'text-gray-100' : '' }`}>{label}</li>)}
+       {NAV_ITEMS.map(({href, label}) => {
+        if (label === 'Search') return <li key="search-trigger">
+          <SearchCommand
+          renderAs="text"
+          label="Search"
+          initialStocks={[]}
+          />
+        </li>
+        return (<li key={href} className={`hover:text-yellow-500 transition-colors ${isActive(href) ? 'text-gray-100' : '' }`}>{label}</li>)})}
     </ul>
   )
 }
